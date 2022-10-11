@@ -13,12 +13,6 @@
   <wsdl:message name="IBookService_GetBooks_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetBooksResponse" />
   </wsdl:message>
-  <wsdl:message name="IBookService_GetBookById_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetBookById" />
-  </wsdl:message>
-  <wsdl:message name="IBookService_GetBookById_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetBookByIdResponse" />
-  </wsdl:message>
   <wsdl:message name="IBookService_DeleteBookById_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteBookById" />
   </wsdl:message>
@@ -42,10 +36,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IBookService/GetBooks" message="tns:IBookService_GetBooks_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IBookService/GetBooksResponse" message="tns:IBookService_GetBooks_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetBookById">
-      <wsdl:input wsaw:Action="http://tempuri.org/IBookService/GetBookById" message="tns:IBookService_GetBookById_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IBookService/GetBookByIdResponse" message="tns:IBookService_GetBookById_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="DeleteBookById">
       <wsdl:input wsaw:Action="http://tempuri.org/IBookService/DeleteBookById" message="tns:IBookService_DeleteBookById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IBookService/DeleteBookByIdResponse" message="tns:IBookService_DeleteBookById_OutputMessage" />
@@ -63,15 +53,6 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="GetBooks">
       <soap:operation soapAction="http://tempuri.org/IBookService/GetBooks" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetBookById">
-      <soap:operation soapAction="http://tempuri.org/IBookService/GetBookById" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

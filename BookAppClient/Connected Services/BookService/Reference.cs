@@ -38,10 +38,10 @@ namespace BookAppSolution.BookService {
         private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte[] PictureField;
+        private string PictureField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime RealeseYearField;
+        private string RealeseYearField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -119,7 +119,7 @@ namespace BookAppSolution.BookService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public byte[] Picture {
+        public string Picture {
             get {
                 return this.PictureField;
             }
@@ -132,12 +132,12 @@ namespace BookAppSolution.BookService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime RealeseYear {
+        public string RealeseYear {
             get {
                 return this.RealeseYearField;
             }
             set {
-                if ((this.RealeseYearField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.RealeseYearField, value) != true)) {
                     this.RealeseYearField = value;
                     this.RaisePropertyChanged("RealeseYear");
                 }
@@ -163,12 +163,6 @@ namespace BookAppSolution.BookService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBookService/GetBooks", ReplyAction="http://tempuri.org/IBookService/GetBooksResponse")]
         System.Threading.Tasks.Task<BookAppSolution.BookService.BookDto[]> GetBooksAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBookService/GetBookById", ReplyAction="http://tempuri.org/IBookService/GetBookByIdResponse")]
-        BookAppSolution.BookService.BookDto GetBookById(int id);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBookService/GetBookById", ReplyAction="http://tempuri.org/IBookService/GetBookByIdResponse")]
-        System.Threading.Tasks.Task<BookAppSolution.BookService.BookDto> GetBookByIdAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBookService/DeleteBookById", ReplyAction="http://tempuri.org/IBookService/DeleteBookByIdResponse")]
         void DeleteBookById(int id);
@@ -222,14 +216,6 @@ namespace BookAppSolution.BookService {
         
         public System.Threading.Tasks.Task<BookAppSolution.BookService.BookDto[]> GetBooksAsync() {
             return base.Channel.GetBooksAsync();
-        }
-        
-        public BookAppSolution.BookService.BookDto GetBookById(int id) {
-            return base.Channel.GetBookById(id);
-        }
-        
-        public System.Threading.Tasks.Task<BookAppSolution.BookService.BookDto> GetBookByIdAsync(int id) {
-            return base.Channel.GetBookByIdAsync(id);
         }
         
         public void DeleteBookById(int id) {

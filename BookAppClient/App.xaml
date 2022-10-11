@@ -2,8 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:BookAppSolution"
-             StartupUri="MainWindow.xaml">
+             xmlns:views="clr-namespace:BookAppSolution.Views"
+             xmlns:viewModels="clr-namespace:BookAppSolution.ViewModels"
+             StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type viewModels:BooksViewModel}">
+            <views:BooksView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

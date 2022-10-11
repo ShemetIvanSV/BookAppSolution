@@ -1,0 +1,152 @@
+﻿<UserControl x:Class="BookAppSolution.Views.BooksView"
+             Background="White"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BookAppSolution.Infrastructure.Validators"
+             xmlns:vm="clr-namespace:BookAppSolution.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:BooksViewModel/>
+    </UserControl.DataContext>
+
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DataGrid ItemsSource="{Binding Books}" 
+                      SelectedItem="{Binding SelectedBook}" 
+                      CanUserAddRows="False"
+                      AutoGenerateColumns="False"
+                      Grid.Row="0"
+                      Grid.ColumnSpan="2"
+                      Grid.RowSpan="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Идентификатор" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Баркод" Binding="{Binding ISBN}"  IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Название" Binding="{Binding Name}"  IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Автор" Binding="{Binding Author}"  IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Описание" Binding="{Binding Description}"  IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Год выпуска" Binding="{Binding RealeseYear}"  IsReadOnly="True"/>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},
+                                              Path=DataContext.DeleteBookCommand}" CommandParameter="{Binding }">Удалить</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <GroupBox Header="Обложка" Grid.Row="0" Grid.Column="2">
+                <Image Source="{Binding SelectedBook.Picture}" />
+            </GroupBox>
+            <GroupBox Visibility="{Binding IsVisibleNewBookMenu, Converter={StaticResource BoolToVis}}" Panel.ZIndex="2" Header="Добавление новой книги" Background="AliceBlue" >
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <StackPanel >
+                            <TextBlock Text="Баркод"/>
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding Path="NewBook.ISBN" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:ISBNValidator/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <TextBlock Text="Название"/>
+                            <TextBox  Text="{Binding NewBook.Name}"/>
+                            <TextBlock Text="Автор"/>
+                            <TextBox  Text="{Binding NewBook.Author}"/>
+                            <TextBlock Text="Описание"/>
+                            <TextBox  Text="{Binding NewBook.Description}"/>
+                            <TextBlock Text="Год выпуска"/>
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding Path="NewBook.RealeseYear" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:YearValidator/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <TextBlock Text="Обложка"/>
+                            <Button Content="Выбрать файл" Command="{Binding SelectPhotoCommand}" />
+                        </StackPanel>
+                    </DockPanel>
+                    <StackPanel Grid.Row="1">
+                        <Button DockPanel.Dock="Left"  Content="Сохранить" Command="{Binding CreateBookCommand}"/>
+                        <Button DockPanel.Dock="Right" Content="Закрыть" Command="{Binding SwichVisibleCreateNewBookCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Visibility="{Binding IsVisibleEditBookMenu, Converter={StaticResource BoolToVis}}" Panel.ZIndex="2" Header="Редактирование" Background="AliceBlue" >
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <StackPanel >
+                            <TextBlock Text="Баркод"/>
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding Path="CopyBook.ISBN" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:ISBNValidator/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <TextBlock Text="Название"/>
+                            <TextBox  Text="{Binding CopyBook.Name}"/>
+                            <TextBlock Text="Автор"/>
+                            <TextBox  Text="{Binding CopyBook.Author}"/>
+                            <TextBlock Text="Описание"/>
+                            <TextBox  Text="{Binding CopyBook.Description}"/>
+                            <TextBlock Text="Год выпуска"/>
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding Path="CopyBook.RealeseYear" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:YearValidator/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <TextBlock Text="Обложка"/>
+                            <Button Content="Выбрать файл" Command="{Binding SelectPhotoCommand}" />
+                        </StackPanel>
+                    </DockPanel>
+                    <StackPanel Grid.Row="1">
+                        <Button DockPanel.Dock="Left"  Content="Сохранить" Command="{Binding UpdateBookCommand}"/>
+                        <Button DockPanel.Dock="Right" Content="Закрыть" Command="{Binding SwichVisibleUpdateBookCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+                <Button Content="Добавить" Command="{Binding SwichVisibleCreateNewBookCommand}" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"/>
+                <Button Content="Изменить" Command="{Binding SwichVisibleUpdateBookCommand}" Grid.Row="1" Grid.Column="1"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

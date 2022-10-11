@@ -1,8 +1,10 @@
 ﻿using BookServices.DTOs;
 using DataAccessLibrary;
 using DataAccessLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 
 namespace BookServices
 {
@@ -10,79 +12,87 @@ namespace BookServices
     {
         public int CreateNewBook(BookDto book)
         {
-            using (var context = new BookContext())
+            try
             {
-                var newBook = new Book
+                using (var context = new BookContext())
                 {
-                    Name = book.Name,
-                    ISBN = book.ISBN,
-                    Author = book.Author,
-                    Description = book.Description,
-                    Picture = book.Picture,
-                    RealeseYear = book.RealeseYear
-                };
+                    var newBook = new Book
+                    {
+                        Name = book.Name,
+                        ISBN = book.ISBN,
+                        Author = book.Author,
+                        Description = book.Description,
+                        Picture = book.Picture,
+                        RealeseYear = book.RealeseYear
+                    };
 
-                context.Books.Add(newBook);
+                    context.Books.Add(newBook);
 
-                context.SaveChanges();
+                    context.SaveChanges();
 
-                return newBook.Id;
+                    return newBook.Id;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException(ex.Message);
             }
         }
 
         public void DeleteBookById(int id)
         {
-            using (var context = new BookContext())
+            try
             {
-                var selectedBook = context.Books.FirstOrDefault(x => x.Id == id);
-
-                context.Books.Remove(selectedBook);
-
-                context.SaveChanges();
-            }
-        }
-
-        public BookDto GetBookById(int id)
-        {
-            using (var context = new BookContext())
-            {
-                var selectedBook = context.Books.FirstOrDefault(x => x.Id == id);
-
-                return new BookDto
+                using (var context = new BookContext())
                 {
-                    ISBN = selectedBook.ISBN,
-                    Id = selectedBook.Id,
-                    Author = selectedBook.Author,
-                    Description = selectedBook.Description,
-                    Name = selectedBook.Name,
-                    Picture = selectedBook.Picture,
-                    RealeseYear = selectedBook.RealeseYear
-                };
+                    var selectedBook = context.Books.FirstOrDefault(x => x.Id == id);
+
+                    context.Books.Remove(selectedBook);
+
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new FaultException(ex.Message);
             }
         }
 
         public IEnumerable<BookDto> GetBooks()
         {
-            using (var context = new BookContext())
+            try
             {
-                return context.Books.ToList().Select(x => new BookDto
+                using (var context = new BookContext())
                 {
-                    Author = x.Author,
-                    ISBN = x.ISBN,
-                    Description = x.Description,
-                    Id = x.Id,
-                    Name = x.Name,
-                    Picture = x.Picture,
-                    RealeseYear = x.RealeseYear
-                });
+                    return context.Books.ToList().Select(x => new BookDto
+                    {
+                        Author = x.Author,
+                        ISBN = x.ISBN,
+                        Description = x.Description,
+                        Id = x.Id,
+                        Name = x.Name,
+                        Picture = x.Picture,
+                        RealeseYear = x.RealeseYear
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new FaultException(ex.Message);
             }
         }
 
         public void UpdateBook(BookDto book)
         {
+            if (book is null)
+                throw new FaultException<ArgumentException>(new ArgumentNullException("book"));
+
             using (var context = new BookContext())
             {
                 var selectedBook = context.Books.FirstOrDefault(x => x.Id == book.Id);
+
+                if (selectedBook is null)
+                    throw new FaultException<ArgumentException>(new ArgumentException($"Не найдена книга по данному идентификатору - {book.Id}"));
 
                 selectedBook.ISBN = book.ISBN;
                 selectedBook.Name = book.Name;
